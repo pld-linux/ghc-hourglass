@@ -6,7 +6,7 @@
 Summary:	Simple performant time related library
 Name:		ghc-%{pkgname}
 Version:	0.2.12
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/hourglass
