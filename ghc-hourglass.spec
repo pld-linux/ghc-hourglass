@@ -4,6 +4,7 @@
 #
 %define		pkgname	hourglass
 Summary:	Simple performant time related library
+Summary(pl.UTF-8):	Prosta, wydajna biblioteka związana z czasem
 Name:		ghc-%{pkgname}
 Version:	0.2.12
 Release:	2
@@ -14,12 +15,19 @@ Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{v
 # Source0-md5:	73b123130a9d1c3c096c6895e3a4915f
 URL:		http://hackage.haskell.org/package/hourglass
 BuildRequires:	ghc >= 6.12.3
+BuildRequires:	ghc-base >= 4
+BuildRequires:	ghc-base < 5
+BuildRequires:	ghc-deepseq
 %if %{with prof}
 BuildRequires:	ghc-prof
+BuildRequires:	ghc-base-prof >= 4
+BuildRequires:	ghc-deepseq-prof
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires(post,postun):	/usr/bin/ghc-pkg
+Requires:	ghc-base >= 4
+Requires:	ghc-deepseq
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -32,15 +40,21 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Simple time library focusing on simple but powerful and performant
 API.
 
+%description -l pl.UTF-8
+Prosta biblioteka czasu, skupiająca się na prostym, ale funkcjonalnym
+i wydajnym API.
+
 %package prof
 Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	ghc-base-prof >= 4
+Requires:	ghc-deepseq-prof
 
 %description prof
-Profiling %{pkgname} library for GHC.  Should be installed when
-GHC's profiling subsystem is needed.
+Profiling %{pkgname} library for GHC. Should be installed when GHC's
+profiling subsystem is needed.
 
 %description prof -l pl.UTF-8
 Biblioteka profilująca %{pkgname} dla GHC. Powinna być zainstalowana
@@ -58,6 +72,7 @@ runhaskell Setup.hs configure -v2 \
 	--docdir=%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.hs build
+
 runhaskell Setup.hs haddock --executables
 
 %install
@@ -88,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGELOG.md README.md %{name}-%{version}-doc/*
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
 
